@@ -1,99 +1,99 @@
 def menu():
     print("""
-          ***NEQUI***
+          *** NEQUI ***
         
-        1. Cargar saldo
-        2. Pagar
-        3. Transferir dinero
-        4. Mostrar saldo
-        5. Salir
-        
-        """)
+1. Cargar saldo
+2. Pagar
+3. Transferir dinero
+4. Mostrar saldo
+5. Salir
+    """)
 
 def leer_opcion():
     menu()
-    op = input()
-    while(not op.isdigit() or int(op)<1 or int(op)>5):
-        print("Opción no válida, digite un número del 1 al 5: ")
-        input("Presione cualquier tecla para continuar...")
-        print("\n\n")
-        menu()
-        op = input()
-
+    op = input("Del 1 al 5, elija una opción: ")
+    while not op.isdigit() or int(op) < 1 or int(op) > 5:
+        print("Opción no válida")
+        op = input("Digite un número del 1 al 5: ")
     return int(op)
 
 def cargar_saldo(saldo):
-        try:    
-            cantidad =int(input("cuanto va a ingresar a su saldo"))
-            if cantidad <= 0:
-                print("ingrese un monto valido, debe ser por encima de $0")
-                return saldo
-            cantidad += saldo
-            print(f"""su saldo se actualizo
-                su saldo actual es {saldo}""")
-        except ValueError:
-            print("error")
+    try:
+        cantidad = int(input("¿Cuánto desea cargar?: $"))
+        if cantidad <= 0:
+            print("Monto inválido")
             return saldo
-        
+        saldo += cantidad
+        print(f"Saldo actualizado: ${saldo}")
+        return saldo
+    except ValueError:
+        print("Error: solo números")
+        return saldo
+
 def pagar(saldo):
     try:
-        pago = float(input("ingrese el monto a pagar: $"))
+        pago = float(input("Monto a pagar: $"))
         if pago <= 0:
-                print("ingrese un monto valido, debe ser por encima de $0")
-                return saldo
-        pago -= saldo
-        print(f"""su saldo se actualizo
-                su saldo actual es {saldo}""")
-        print(f"el pago que acabo de realizar fue de ${pago}")
-    except ValueError:
-            print("error")
+            print("Monto inválido")
             return saldo
+        if pago > saldo:
+            print("Saldo insuficiente")
+            return saldo
+        saldo -= pago
+        print(f"Pago realizado por ${pago}")
+        print(f"Saldo actual: ${saldo}")
+        return saldo
+    except ValueError:
+        print("Error: solo números")
+        return saldo
 
 def transferencia(saldo):
     try:
-        celular = int(input("Ingrese el telefono ppara realizar la transferencia: "))
-        
-        if not (celular.isdigit and len(celular) == 10):
-            print ("el numero tiene mas caracteres, ingrese de nuevo")
-            
-        if celular <= 0:
-                print("ingrese un monto valido, debe ser por encima de $0")
-                return saldo
-        celular -= saldo
-        print(f"""su saldo se actualizo
-                su saldo actual es {saldo}""")
-        print(f"el pago que acabo de realizar fue de ${celular}")
+        celular = input("Ingrese el número de celular: ")
+        if not celular.isdigit() or len(celular) != 10:
+            print("Número inválido")
+            return saldo
+
+        monto = float(input("Monto a transferir: $"))
+        if monto <= 0:
+            print("Monto inválido")
+            return saldo
+        if monto > saldo:
+            print("Saldo insuficiente")
+            return saldo
+
+        saldo -= monto
+        print(f"Transferencia exitosa a {celular}")
+        print(f"Saldo actual: ${saldo}")
+        return saldo
     except ValueError:
-            print("error")
-            return saldo    
+        print("Error en los datos")
+        return saldo
 
 def cuenta(saldo):
-
-    print(f"""el saldo actual de su cuenta es de 
-                   ***{saldo}***""")
-
+    print("*" * 50)
+    print(f"Saldo actual: ${saldo}")
+    print("*" * 50)
 def main():
+    saldo = 0
     opcion = 0
-    saldo = 0.0
-    while ((opcion != 5)):
-        
+
+    while opcion != 5:
         opcion = leer_opcion()
 
         if opcion == 1:
-            cargar_saldo()
-        elif opcion ==2:
-            pagar()
-        elif opcion ==3:
-            transferencia()
-        elif opcion ==4:
-            cuenta()
-        elif opcion ==5:
-            pass
-        else:
-            print("\nGracias por usar el software. adios...")
-            
-        input("Presione cualquier tecla para continuar....")
-        print("\n\n")
+            saldo = cargar_saldo(saldo)
+        elif opcion == 2:
+            saldo = pagar(saldo)
+        elif opcion == 3:
+            saldo = transferencia(saldo)
+        elif opcion == 4:
+            cuenta(saldo)
+        elif opcion == 5:
+            print("Gracias por usar Nequi ")
 
-if __name__=="__main__":
+        input("Presione ENTER para continuar...")
+        print("\n" * 2)
+
+if __name__ == "__main__":
     main()
